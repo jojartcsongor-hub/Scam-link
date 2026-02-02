@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💘 Valentin?</title>
+
+<style>
+body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffd6e0, #ffeef3);
+    font-family: system-ui, sans-serif;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+    width: min(90%, 320px);
+}
+
+.buttons {
+    position: relative;
+    height: 100px;
+    margin-top: 20px;
+}
+
+button {
+    padding: 15px 25px;
+    font-size: 18px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    position: absolute;
+    transition: left 0.15s ease, top 0.15s ease;
+}
+
+#yes {
+    background: #ff4d6d;
+    color: white;
+    left: 0;
+    top: 20px;
+}
+
+#no {
+    background: #ddd;
+    right: 0;
+    top: 20px;
+}
+
+.meme {
+    display: none;
+    margin-top: 20px;
+}
+
+.meme img {
+    max-width: 100%;
+    border-radius: 15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h1>Leszel a Valentinom? 💖</h1>
+
+    <div class="buttons" id="arena">
+        <button id="yes">Igen</button>
+        <button id="no">Nem</button>
+    </div>
+
+    <div class="meme" id="meme">
+        <img src="https://i.imgflip.com/4/30b1gx.jpg" alt="Happy meme">
+        <h2>EZ AZZZZ 😍💘</h2>
+    </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const arena = document.getElementById("arena");
+const yesBtn = document.getElementById("yes");
+const meme = document.getElementById("meme");
+
+const isTouch = 'ontouchstart' in window;
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+
+arena.addEventListener("mousemove", (e) => {
+    if (isTouch) return;
+
+    const rect = arena.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const btnX = btnRect.left - rect.left + btnRect.width / 2;
+    const btnY = btnRect.top - rect.top + btnRect.height / 2;
+
+    const dx = btnX - mouseX;
+    const dy = btnY - mouseY;
+    const dist = Math.hypot(dx, dy);
+
+    if (dist < 160) {
+        const strength = 60;
+        let newX = btnRect.left - rect.left + dx / dist * strength;
+        let newY = btnRect.top - rect.top + dy / dist * strength;
+
+        newX = clamp(newX, 0, rect.width - btnRect.width);
+        newY = clamp(newY, 0, rect.height - btnRect.height);
+
+        noBtn.style.left = newX + "px";
+        noBtn.style.top = newY + "px";
+        noBtn.style.right = "auto";
+    }
+});
+
+noBtn.addEventListener("touchstart", () => {
+    const rect = arena.getBoundingClientRect();
+    const x = Math.random() * (rect.width - noBtn.offsetWidth);
+    const y = Math.random() * (rect.height - noBtn.offsetHeight);
+
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+    noBtn.style.right = "auto";
+});
+
+yesBtn.addEventListener("click", () => {
+    document.querySelector(".buttons").style.display = "none";
+    document.querySelector("h1").style.display = "none";
+    meme.style.display = "block";
+});
+</script>
+
+</body>
+</html>
